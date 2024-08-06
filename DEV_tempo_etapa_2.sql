@@ -1,4 +1,4 @@
-CREATE OR REPLACE VIEW sandbox.originacao.tempo_etapa_2 AS
+-- CREATE OR REPLACE VIEW sandbox.originacao.tempo_etapa_2 AS
 
 WITH
 
@@ -31,7 +31,7 @@ join_cross_orig AS (
     orig_1.data_inicio,
     orig_1.data_fim,
     orig_1.data_fim_OLD,
-    orig_2.perdido_em,
+    orig_1.perdido_em,
     orig_1.is_lost,
     orig_1.duracao_dias
 
@@ -116,6 +116,7 @@ perdidas_prorrogadas AS (
 
 union_all AS (
     SELECT * FROM virtual_dates
+    WHERE virtual_dates.data_inicio_virtual IS NOT NULL
     UNION ALL
     SELECT * FROM perdidas_prorrogadas
 ),
@@ -124,11 +125,16 @@ final AS (
     SELECT *,
     datediff(data_fim_virtual, data_inicio_virtual) as duracao_dias_virtual  
      FROM union_all
-    WHERE data_inicio_virtual IS NOT NULL
 )
 
 SELECT * FROM final
-
+-- WHERE   work_item_id = 180451
+order by data_inicio desc
+ 
+-- SELECT * FROM virtual_dates WHERE work_item_id = '180451'
+-- SELECT * FROM join_cross_orig WHERE work_item_id = '11679'
+-- SELECT * FROM cross_orig_etapas WHERE work_item_id = '11679'
 
 -- SELECT * FROM final WHERE work_item_id = 180451
 -- SELECT * FROM etapas
+
