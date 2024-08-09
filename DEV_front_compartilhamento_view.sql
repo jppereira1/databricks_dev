@@ -1,3 +1,5 @@
+--CREATE OR REPLACE VIEW sandbox.originacao.front_compartilhamento_view AS
+
 WITH
 -- ============================ IMPORTS
 related_work_items AS (
