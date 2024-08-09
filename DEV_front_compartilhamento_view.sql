@@ -194,7 +194,7 @@ final AS (
 
     FROM semifinal
 
-    WHERE year(target_data_resposta) >= 2023
+    WHERE year(target_data_resposta) >= 2022
 )
 
 SELECT
