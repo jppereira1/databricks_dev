@@ -137,4 +137,3 @@ order by data_inicio desc
 
 -- SELECT * FROM final WHERE work_item_id = 180451
 -- SELECT * FROM etapas
-

@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "connectionMethod": "Hostname and Token",
+            "catalog": "hive_metastore",
+            "previewLimit": 50,
+            "driver": "Databricks",
+            "name": "DatabricksTrinus",
+            "group": "DSN Databricks Trinus",
+            "host": "adb-5979074469666640.0.azuredatabricks.net",
+            "path": "/sql/1.0/endpoints/9d983a38a6027f4e"
+        }
+    ]
+}
