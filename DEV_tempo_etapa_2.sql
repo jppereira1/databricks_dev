@@ -1,4 +1,4 @@
--- CREATE OR REPLACE VIEW sandbox.originacao.tempo_etapa_2 AS
+--CREATE OR REPLACE VIEW sandbox.originacao.tempo_etapa_2 AS
 
 WITH
 
@@ -55,7 +55,7 @@ virtual_dates AS (
     jco.data_fim,
     jco.data_fim_OLD,
 
-    COALESCE(
+    DATE_FORMAT(COALESCE(
             jco.data_inicio,
             LEAD(jco.data_inicio, 1) OVER (PARTITION BY jco.work_item_id ORDER BY jco.ordem_etapa),
             LEAD(jco.data_inicio, 2) OVER (PARTITION BY jco.work_item_id ORDER BY jco.ordem_etapa),
@@ -64,9 +64,9 @@ virtual_dates AS (
             LEAD(jco.data_inicio, 5) OVER (PARTITION BY jco.work_item_id ORDER BY jco.ordem_etapa),
             LEAD(jco.data_inicio, 6) OVER (PARTITION BY jco.work_item_id ORDER BY jco.ordem_etapa),
             LEAD(jco.data_inicio, 7) OVER (PARTITION BY jco.work_item_id ORDER BY jco.ordem_etapa)
-        ) AS data_inicio_virtual,
+        ),'dd-MM-yyyy') AS data_inicio_virtual,
 
-    COALESCE(
+    DATE_FORMAT(COALESCE(
             jco.data_fim,
             LEAD(jco.data_inicio, 1) OVER (PARTITION BY jco.work_item_id ORDER BY jco.ordem_etapa),
             LEAD(jco.data_inicio, 2) OVER (PARTITION BY jco.work_item_id ORDER BY jco.ordem_etapa),
@@ -75,7 +75,7 @@ virtual_dates AS (
             LEAD(jco.data_inicio, 5) OVER (PARTITION BY jco.work_item_id ORDER BY jco.ordem_etapa),
             LEAD(jco.data_inicio, 6) OVER (PARTITION BY jco.work_item_id ORDER BY jco.ordem_etapa),
             LEAD(jco.data_inicio, 7) OVER (PARTITION BY jco.work_item_id ORDER BY jco.ordem_etapa)
-        ) AS data_fim_virtual,
+        ),'dd-MM-yyyy') AS data_fim_virtual,
 
     jco.perdido_em,
     COALESCE(
