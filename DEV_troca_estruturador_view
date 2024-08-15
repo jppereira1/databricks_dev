@@ -1,4 +1,4 @@
--- CREATE OR REPLACE VIEW sandbox.originacao.troca_analista_view AS
+-- CREATE OR REPLACE VIEW sandbox.originacao.troca_estruturador_view AS
 
 WITH exploded_json AS (
   SELECT
@@ -30,9 +30,9 @@ final AS (
     log.work_item_id,
     wit.name AS work_item_name,
     log.board_id,
-    COALESCE(log.previous_json_map['shkAnalistaDeCredito'], log.previous_json_map['shkAnalistaVertical']) AS previous_user_id,
+    COALESCE(log.previous_json_map['shkEstruturadorDeNegocio'], log.previous_json_map['shkLiderVertical']) AS previous_user_id,
     us2.name AS previous_user_name,
-    COALESCE(log.new_json_map['shkAnalistaDeCredito'], log.new_json_map['shkAnalistaVertical']) AS new_user_id,
+    COALESCE(log.new_json_map['shkEstruturadorDeNegocio'], log.new_json_map['shkLiderVertical']) AS new_user_id,
     us3.name AS new_user_name,  
     from_utc_timestamp(log.creation_timestamp,'America/Sao_Paulo')::DATE AS data_mudanca,
     log.creation_user_id,
@@ -47,13 +47,13 @@ final AS (
     ON wit.id = log.work_item_id
     
     LEFT JOIN raw_views.ocean_workspace_public.users us2
-    ON COALESCE(log.previous_json_map['shkAnalistaDeCredito'], log.previous_json_map['shkAnalistaVertical']) = us2.id
+    ON COALESCE(log.previous_json_map['shkEstruturadorDeNegocio'], log.previous_json_map['shkLiderVertical']) = us2.id
     
     LEFT JOIN raw_views.ocean_workspace_public.users us3
-    ON COALESCE(log.new_json_map['shkAnalistaDeCredito'], log.new_json_map['shkAnalistaVertical']) = us3.id
+    ON COALESCE(log.new_json_map['shkEstruturadorDeNegocio'], log.new_json_map['shkLiderVertical']) = us3.id
     
-    WHERE COALESCE(log.previous_json_map['shkAnalistaDeCredito'], log.previous_json_map['shkAnalistaVertical']) 
-        <> COALESCE(log.new_json_map['shkAnalistaDeCredito'], log.new_json_map['shkAnalistaVertical'])
+    WHERE COALESCE(log.previous_json_map['shkEstruturadorDeNegocio'], log.previous_json_map['shkLiderVertical']) 
+        <> COALESCE(log.new_json_map['shkEstruturadorDeNegocio'], log.new_json_map['shkLiderVertical'])
     
     ORDER BY log.creation_timestamp DESC)
 
