@@ -24,7 +24,6 @@ sub_final AS (
     CASE WHEN target_esteira_nome = 'Crédito' THEN 'Crédito' ELSE target_vertical END AS vertical_aprovada,
     CASE WHEN target_esteira_nome = 'Crédito' THEN 1 ELSE qtd_empreendimentos END AS qtd_ajustada,
     target_analista
-    --- TA FALTANDO COLUNA, TEM QUER FAZER JOIN COM A ALL_OPERATIONS
 
     FROM sandbox.originacao.front_compartilhamento_view
 
