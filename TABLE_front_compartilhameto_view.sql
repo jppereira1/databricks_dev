@@ -10,11 +10,13 @@ sub_final AS (
    SELECT
     origin_work_item_id,
     split(origem_operacao_nome, ",")[0] AS codigo_ocean,
-    from_utc_timestamp(origem_data_criacao, 'America/Sao_Paulo')::DATE AS data_criacao,
+    -- from_utc_timestamp(origem_data_criacao, 'America/Sao_Paulo')::DATE AS data_criacao,
+    origem_data_criacao AS data_criacao,
     target_esteira_nome,
     target_work_item_id,
     target_operacao_nome,
-    from_utc_timestamp(target_data_resposta, 'America/Sao_Paulo')::DATE AS data_resposta, 
+    -- from_utc_timestamp(target_data_resposta, 'America/Sao_Paulo')::DATE AS data_resposta,
+    target_data_resposta AS data_resposta, 
     situation,
     origem_vertical,
     duracao_dias,
@@ -28,7 +30,8 @@ sub_final AS (
     FROM sandbox.originacao.front_compartilhamento_view
 
     WHERE target_esteira_nome IN ('Crédito', 'Equity') AND
-        origem_operacao_nome NOT IN ('teste','TESTE', 'Teste')
+        origem_operacao_nome NOT IN ('teste','TESTE', 'Teste') AND
+        origem_tipo = "Front"
     ORDER BY data_resposta DESC
 
 ),
@@ -67,4 +70,5 @@ final AS (
 )
 
 SELECT * FROM final
-LIMIT 10;
+-- where origin_work_item_id = 216447
+-- LIMIT 10;
