@@ -1,4 +1,4 @@
-CREATE OR REPLACE TABLE sandbox.originacao.tab_front_compartilhamento AS
+-- CREATE OR REPLACE TABLE sandbox.originacao.tab_front_compartilhamento AS
 
 WITH 
 
@@ -9,6 +9,7 @@ all_operations AS (
 sub_final AS (
    SELECT
     origin_work_item_id,
+    target_work_item_id,
     split(origem_operacao_nome, ",")[0] AS codigo_ocean,
     -- from_utc_timestamp(origem_data_criacao, 'America/Sao_Paulo')::DATE AS data_criacao,
     origem_data_criacao AS data_criacao,
@@ -38,37 +39,37 @@ sub_final AS (
 
 final AS (
     SELECT
-        sf.origin_work_item_id,
-        sf.codigo_ocean,
-        sf.data_criacao,
-        sf.target_esteira_nome,
-        sf.target_work_item_id,
-        sf.target_operacao_nome,
-        sf.data_resposta,
-        sf.situation,
-        sf.origem_vertical,
-        sf.duracao_dias,
-        sf.target_motivo_recusa,
-        sf.qtd_empreendimentos,
-        sf.estruturador,
-        sf.vertical_aprovada,
-        sf.qtd_ajustada,
-        sf.target_analista,
-        ao.etapa_origem,
-        ao.alocacao_total,
+    sf.origin_work_item_id,
+    sf.codigo_ocean,
+    sf.data_criacao,
+    sf.target_esteira_nome,
+    sf.target_work_item_id,
+    sf.target_operacao_nome,
+    sf.data_resposta,
+    sf.situation,
+    sf.origem_vertical,
+    sf.duracao_dias,
+    sf.target_motivo_recusa,
+    sf.qtd_empreendimentos,
+    sf.estruturador,
+    sf.vertical_aprovada,
+    sf.qtd_ajustada,
+    sf.target_analista,
+    ao.etapa_origem,
+    ao.alocacao_total,
 
-        -- REGRA QUE DEIXA NULO A QUANTIDADE DE EMPREENDIMENTOS PARA AS OPERAÇÕES REPETIDAS
-        CASE 
-            WHEN COUNT(sf.origin_work_item_id) OVER (PARTITION BY sf.origin_work_item_id) > 1 AND sf.situation = "Refused" THEN NULL
-            ELSE sf.qtd_ajustada
-        END AS qtd_empreendimentos_2
+    -- REGRA QUE DEIXA NULO A QUANTIDADE DE EMPREENDIMENTOS PARA AS OPERAÇÕES REPETIDAS
+    CASE 
+        WHEN COUNT(sf.origin_work_item_id) OVER (PARTITION BY sf.origin_work_item_id) > 1 AND sf.situation = "Refused" THEN NULL
+        ELSE sf.qtd_ajustada
+    END AS qtd_empreendimentos_2
 
-    FROM sub_final sf
+  FROM sub_final AS sf
 
-    LEFT JOIN all_operations AS ao ON ao.operacao_id = sf.codigo_ocean
-    ORDER BY sf.data_resposta DESC
+  LEFT JOIN all_operations AS ao ON ao.work_item_id = sf.target_work_item_id
+  ORDER BY sf.data_resposta DESC
 )
 
 SELECT * FROM final
--- where origin_work_item_id = 216447
+-- where origin_work_item_id = 17197
 -- LIMIT 10;
